@@ -1,0 +1,39 @@
+{% load static %} 
+<link rel="stylesheet" href="{% static './addSprint/addSprint.css' %}"> 
+<title>Add sprint</title> 
+<div class="container">  
+    <form id="contact" action="{% url 'sprint:saveSprint' %}" method="post">
+    {% csrf_token %}
+        <h3 style="color:#0CF">Enter Your Sprint:</h3>
+        <br>
+
+        <fieldset>
+            <input  type="text" placeholder="Enter Sprint Name" name="sprintName" required>
+        </fieldset>
+
+        <fieldset>
+            <label>Add User Stories:</label>
+            {% for u in userStories %}
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value={{u.content}} id={{u.content}} name="userStoriesChoose">
+                    <label class="form-check-label" for="{{u.content}}">{{u.content}}</label>
+                </div>
+            {% endfor %}  
+        </fieldset>
+
+        <fieldset>
+            <input type="text" name="endDate" placeholder="Enter End Date" min={{today}} onfocus="(this.type='date')" onblur="(this.type='text')" required>
+        </fieldset>
+
+        <fieldset>
+            <button name="submit" type="submit" id="contact-submit" data-submit="...Sending">Submit</button>
+        </fieldset>
+
+    </form> 
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags %}<script>alert("{{ message }}");</script>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+</div>

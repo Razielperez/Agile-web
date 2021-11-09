@@ -1,0 +1,32 @@
+{% load static %}
+<title>Add project</title>  
+<div class="container">  
+<link rel="stylesheet" href="{% static './cssCreateStory/cssCreateStory.css' %}"> 
+  <form id="contact" action="{% url 'project:saveNewProject' %}" method="post">
+  {% csrf_token %}
+    <h3 style="color: #0CF">Enter Your Project</h3>
+    <br> 
+    <fieldset>
+      <input type="text" placeholder="Enter Project Name" name="nameProject" required>
+    </fieldset>
+    <fieldset>
+      <label>Add Users:</label>
+        {% for u in users %}
+          <div class="form-check">
+          <input class="form-check-input" type="checkbox" value={{u.userName}}  name="users">
+          <label class="form-check-label" for="{{u.userName}}">{{u.userName}}</label>
+        </div>
+        {% endfor %}  
+    </fieldset>
+    <fieldset>
+     <button name="submit" type="submit" id="contact-submit" data-submit="...Sending">Submit</button>
+    </fieldset>
+
+   </form> 
+   {% if messages %}
+        {% for message in messages %}
+            {% if message.tags %}<script>alert("{{ message }}");</script>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+</div>

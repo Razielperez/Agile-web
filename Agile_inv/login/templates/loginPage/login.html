@@ -1,0 +1,26 @@
+{% load static %} 
+    <link rel="stylesheet" href="{% static './cssLogin/cssLogin.css' %}"> 
+    <title>Login</title>
+    <div class="container">
+    <div class="left-section">
+    <div class="header">
+        <h1 class="animation a1">Welcome</h1>
+        <h4 class="animation a2">Log in for entering your member dashboard.</h4>
+    </div>
+    <div class="form">
+        <form class="form" method="post" action="{% url 'login:submit_login' %}"> 
+        {% csrf_token %}
+            <input type="text" name="username" class="form-field animation a3" placeholder="Username" required>
+            <input type="password" name="password" class="form-field animation a4" placeholder="Password" required>
+            <button class="animation a6">LOGIN</button>
+        </form>
+        <form class="form" action="{% url 'login:register' %}">
+            <button class="animation a6">Register</button>
+        </form> 
+        
+        
+    </div>
+    </div>
+    <div class="right-section"></div>
+    </div>    
+    

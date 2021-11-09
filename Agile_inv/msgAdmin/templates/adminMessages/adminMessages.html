@@ -1,0 +1,113 @@
+
+{% load static %} 
+<link rel="stylesheet" href="{% static './adminMessages/adminMessages.css' %}"> 
+<script src="{% static 'js/adminMessages.js' %}"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
+</style>
+
+<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;top:0%;left: 0%;" id="mySidebar"><br>
+  <div class="w3-container w3-row">
+    <div class="w3-col s8 w3-bar">
+     <span>Welcome, <strong>{{user.firstName}} {{user.lastName}}</strong></span><br>
+    </div>
+  </div>
+  <hr>
+  <div class="w3-container">
+    <h5>Dashboard</h5>
+  </div>
+  <div class="w3-bar-block">
+    <a href={% url 'login:returnOverview' %} class="w3-bar-item w3-button w3-padding "><i class="fa fa-users fa-fw"></i>  Overview</a>
+    {% if user.role == "teamLeader" %}
+       <a href="{% url 'msg:messagesPage' %}" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-envelope fa-fw"></i>  Messages</a>
+    {% endif %}
+   
+
+    <a href="{% url 'project:createPro' %}" class="w3-bar-item w3-button w3-padding "><i class="fa fa-eye fa-fw"></i>  My Project</a>
+    
+  </div>
+</nav>
+
+
+
+
+
+<title>masseges</title>
+<section class="msger">
+  <header class="msger-header">
+    <div class="msger-header-title">
+      <i class="fa fa-comments"></i> chat
+    </div>
+    <div class="msger-header-options">
+      <span><i class="fa fa-cog"></i></span>
+    </div>
+  </header>
+  <main class="msger-chat">
+    <div class="msg left-msg">
+      <div
+       class="msg-img"
+       style="background-image: url(https://image.flaticon.com/icons/svg/327/327779.svg)"
+      ></div>
+
+      <div class="msg-bubble">
+        <div class="msg-info">
+          <div class="msg-info-name">admin</div>
+         
+        </div>
+
+        <div class="msg-text">
+          Hi, welcome to admin chat! Go ahead and send me a message. 😄
+        </div>
+      </div>
+    </div>
+  {% for msg in admin_messages %}
+    <div class="msg right-msg">
+      <div
+       class="msg-img"
+       style="background-image: url(https://image.flaticon.com/icons/svg/145/145867.svg)"
+      ></div>
+
+      <div class="msg-bubble">
+        <div class="msg-info">
+          <div class="msg-info-name">{{user.userName}}</div>
+          <div class="msg-info-time">{{msg.date}}</div>
+        </div>
+
+        <div class="msg-text">
+          {{msg.content}}
+        </div>
+      </div>
+    </div>
+
+       <div class="msg left-msg">
+      <div
+       class="msg-img"
+       style="background-image: url(https://image.flaticon.com/icons/svg/327/327779.svg)"
+      ></div>
+
+      <div class="msg-bubble">
+        <div class="msg-info">
+          <div class="msg-info-name">admin</div>
+          <div class="msg-info-time">{{msg.date}}</div>
+        </div>
+        <div class="msg-text">
+          The request has been handled successfully. 😄
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+  </main>
+
+
+  <form class="msger-inputarea" action="{% url 'msg:messageSave' %}" method="post">
+  {% csrf_token %}
+    <input  required class="msger-input" type="text" name="content"  placeholder="Enter your message..." >
+    <button  class="msger-send-btn" type="submit">Send</button>
+  </form>
+</section>
+

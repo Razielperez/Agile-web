@@ -1,0 +1,56 @@
+{% load static %} 
+<title>Add user story</title>
+<div class="container">  
+<link rel="stylesheet" href="{% static './cssCreateStory/cssCreateStory.css' %}"> 
+{% if  user_story %}
+  <form id="contact" action="{% url 'userStory:updateAction' id=user_story.id %}" method="post">
+{% else %}
+  <form id="contact" action="{% url 'userStory:submit_story' %}" method="post">
+{% endif %}
+  {% csrf_token %}
+    <h3 style="color:#0CF">Enter Your User Story</h3>
+    <br>
+    <fieldset>
+    <select name="Assign" style="width: 100%; border: 1px solid #ccc;background-color: #FFF;margin:0 0 5px;padding:10px" value="tom123"> required>
+                <option value="None">Choose user to assign</option>
+                {% for u in users %}
+                    <option id="{{u.userName}}" name="{{u.userName}}" value="{{u.userName}}">{{u.userName}}</option>
+                {% endfor %}
+    </select>  
+    </fieldset>
+
+
+    <fieldset>
+    <select name="Priority" style="width: 100%; border: 1px solid #ccc;background-color: #FFF;margin:0 0 5px;padding:10px"> required>
+                <option value="None">Enter Priority</option>
+                {% for i in range %}
+                    <option id={{i}} name="{{i}}" value="{{i}}">{{i}}</option>
+                {% endfor %}
+    </select>  
+ 
+    </fieldset>
+
+    <fieldset>
+      <textarea placeholder="Type your content Here...." tabindex="3" name = "Content" id="content" required></textarea>
+    </fieldset>
+
+    <fieldset>
+     <button name="submit" type="submit" id="contact-submit" data-submit="...Sending">Submit</button>
+    </fieldset>
+
+   </form>
+   {% if messages %}
+      {% for message in messages %}
+        {% if message.tags %}<script>alert("{{ message }}");</script>{% endif %}
+      {% endfor %}
+    {% endif %} 
+</div>
+<script>
+  {% if user_story %}    
+    document.getElementById('{{user_story.assign}}').setAttribute('selected', true)
+    document.getElementById('{{user_story.priority}}').setAttribute('selected', true)
+    document.getElementById('content').textContent = {{user_story.content}}
+
+    
+  {% endif %}
+</script> 

@@ -1,0 +1,37 @@
+{% block body %}
+<title>Register</title>
+{% load static %} 
+    <link rel="stylesheet" href="{% static './cssLogin/cssLogin.css' %}"> 
+    <div class="container">
+    <div class="left-section">
+    <div class="header">
+        <h1 class="animation a1">Welcome</h1>
+        <h4 class="animation a2">Log in for entering your member dashboard.</h4>
+    </div>
+    <div class="form">
+        <form class="form" method="post" action="{% url 'login:submit_registration' %}">
+        {% csrf_token %}
+            <input type="text" class="form-field animation a4" name="firstName" placeholder="First Name" required>
+            <input type="text" class="form-field animation a3" name="lastName" placeholder="Last Name" required>
+            <input type="text" class="form-field animation a3" name="userName" placeholder="Username" required>
+            <input type="password" class="form-field animation a4" name="password" placeholder="Password" required>
+            <select name="role" id="role" class="form-field animation a3"  required>
+                <option value="choose">Choose role</option>
+                <option value="teammate">Teammate</option>
+                <option value="teamLeader">Team Leader</option>
+            </select>      
+            <button class="animation a6">Complete Register</button>
+        </form>    
+    </div>
+    </div>
+    <div class="right-section"></div>
+    </div> 
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags %}<script>alert("{{ message }}")</script>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+   
+    
+{% endblock body %}

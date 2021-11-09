@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+
+{% load static %}
+<title>{{project.name}} sprints</title> 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link rel="stylesheet" href="{% static './testFolder/test.css' %}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/jquery-ui.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link href='https://fonts.googleapis.com/css?family=Lato:400,500,900' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
+
+</style>
+<!--###############################-menu##################################################- -->
+
+
+<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
+  <div class="w3-container w3-row">
+    <div class="w3-col s8 w3-bar">
+      <span>Welcome, <strong>{{user.firstName}} {{user.lastName}}</strong></span><br>
+      </div>
+  </div>
+  <hr>
+  <div class="w3-container">
+    <h5>Dashboard</h5>
+  </div>
+  <div class="w3-bar-block">
+    <a href="{% url 'login:returnOverview' %}" class="w3-bar-item w3-button w3-padding "><i class="fa fa-users fa-fw"></i>  Overview</a>
+    {% if user.role == "teamLeader" %}
+        <a href="{% url 'msg:messagesPage' %}" class="w3-bar-item w3-button w3-padding"><i class="fa fa-envelope fa-fw"></i>  Messages</a>
+    {% endif %}
+    <a href="{% url 'project:createPro' %}" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-eye fa-fw"></i>  My Project</a>
+    <div class="sortable-accordion">
+        <p class="w3-bar-item w3-button w3-padding w3-orange" style="margin-left: 10%;"><i class="fa fa-arrow-right fa-fw"></i>{{project.name}}</p>
+        
+    
+        <section class="inner " >
+                <ul class="sortable" style="margin-left: 20%;">
+                <li class="w3-bar-item w3-button w3-padding "><a href="{% url 'userStory:userStoryPage' nameProject=project.name %}"><i class="fa fa-info-circle fa-fw"></i>info and user story</a></li>  
+                <li class="w3-bar-item w3-button w3-padding w3-red"><a><i class="fa fa-rocket  fa-fw"></i>sprint</a></li>   
+            </ul> 
+        </section>
+        </div>
+<script>
+    $(document).ready(function(){	
+        $(function () {
+        //  Accordion Panels
+        $(".sortable-accordion div").show();
+        $('.sortable-accordion section').slideToggle('slow');
+        $(".sortable-accordion p").click(function () {
+            $(this).next(".inner").slideToggle().siblings(".inner:visible").slideUp();
+            $(this).toggleClass("current");
+            $(this).siblings("h3").removeClass("current");
+        });
+        });
+    });
+</script>
+   
+
+    
+   
+  </div>
+</nav>
+
+   
+<!--###############################-menu##################################################- -->
+
+
+<html lang="en">
+    <head> 
+        <title>{{project.name}}</title>
+    </head>
+    <body class="w3-light-grey" style="display: flex;lex-direction: column-reverse;">
+        <section class="kanban__main">
+            <span>
+                <div class="kanban__main-wrapper" style="grid-auto-columns:40rem;width: 100%;margin: 1px 0px 0px 299px; padding: 70px 40px 70px;display: table">              
+    <!-- ============================= Part In userStory ===================== -->
+                    {% for sprint in sprints %}
+                        <div class="review-color card-wrapper sortable-accordion raziel"style=" width: 1028px; margin-left: 238px;margin-bottom: 24px;">
+                          
+                            
+                            <p class="backlog-name" style="text-align:center">{{sprint.nameSprint}} <br> {{sprint.dateStart}} - {{sprint.dateEnd}}</p>
+                       
+                            <section class="inner" >
+                                <ul style="list-style-type: none;">
+                                    {% for user_story in  sprint.getUserStory %}
+                                    <li>
+                                        <div class="card" draggable="true" style="width: 617px;margin-left: 18%;">
+                                            <div class="card__header">
+                                                <div class="card-container-color card-color-med">
+                                                        <div class="card__header-priority">Priority: {{user_story.priority}}</div>
+                                                </div>
+                                            </div>
+                                            {% if user_story.status == "Not Done" %}
+                                                <div class="card__text">{{user_story.content}} </div>
+                                            {% else %}
+                                                <s><div class="card__text">{{user_story.content}} </div></s>
+                                            {% endif %}
+                                            <div class="card__menu">
+                                                <div class="card__menu-left">
+                                                    <div class="comments-wrapper">
+                                                        <div class="comments-ico"><i class="material-icons">person</i></div>
+                                                        <div class="comments-num">{{user_story.assign}}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="card__menu-right">
+                                                    <a href={% url 'userStory:updateToDone' id=user_story.id %}><div class="add-peoples"><i class="material-icons">check</i></div></a>
+                                                    <a href={% url 'userStory:updateUserStory' id=user_story.id %}><div class="add-peoples"><i class="material-icons">edit</i></div></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </section>                
+                        </div>
+                    {% endfor %}
+	            </div>
+                   
+                    
+        </section>
+        {% if project.teamLeader == user.userName %}
+                    <a href={%url 'sprint:addSprint'%}><div class="kanban__main-add-btn buttonFloat" style="left:90%;"><i class="material-icons">add</i></div></a>
+        {% endif %}
+    </body>
+
+    <script>
+    function test(str){
+        alert('2')
+        $('.raziel section').slideToggle('slow');
+    }
+    var original_top = $(".buttonFloat").offset().top
+    $(window).scroll(function(){
+        $(".buttonFloat").offset({top: $(this).scrollTop() + original_top})
+    });
+
+    </script>
+
+</html>

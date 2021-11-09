@@ -1,0 +1,265 @@
+{% load static %} 
+<html>
+<title>Home page</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link rel="stylesheet" href="{% static './homePage/homePage.css' %}"> 
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+<style>
+html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
+</style>
+
+{% block body %}
+<body class="w3-light-grey">
+
+<!-- Top container -->
+<div>
+  <a class="w3-right" style="z-index:999;" href={% url 'login:homePage' %}><img style="width: 64%;" src="https://img.icons8.com/nolan/64/shutdown.png"/></a>
+</div>
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;top:0%;" id="mySidebar"><br>
+  <div class="w3-container w3-row">
+    <div class="w3-col s8 w3-bar">
+      <span style="font-family: "Raleway", sans-serif;">Welcome, <strong style="font-family: "Raleway", sans-serif;">{{user.firstName}} {{user.lastName}}</strong></span><br>
+      
+    </div>
+  </div>
+  <hr>
+  <div class="w3-container">
+    <h5>Dashboard</h5>
+  </div>
+  <div class="w3-bar-block">
+    <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-users fa-fw"></i>  Overview</a>
+    {% if user.role == "teamLeader" %}
+       <a href="{% url 'msg:messagesPage' %}" class="w3-bar-item w3-button w3-padding"><i class="fa fa-envelope fa-fw"></i>  Messages</a>
+    {% endif %}
+    <a href="{% url 'project:createPro' %}" class="w3-bar-item w3-button w3-padding"><i class="fa fa-eye fa-fw"></i>  My Project</a>
+ 
+  </div>
+</nav>
+
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:300px;margin-top:43px;">
+
+  <!-- Header -->
+  <div class="w3-container" style="padding-top:30px;text-align:center">
+    <p class= "titleAbout" style="display: inline;"> Website Features: </p>
+    <p class="titleAbout typing" style="display: inline; color:crimson"></p>
+  </div>
+
+  <div class="w3-row-padding w3-margin-bottom">
+    <div class="w3-quarter">
+      <div class="w3-container w3-red w3-padding-16">
+        <div class="w3-left"><i class="fa fa-comment w3-xxxlarge"></i></div>
+        <div class="w3-right">
+        
+        </div>
+        <div class="w3-clear"></div>
+        <h4>Messages</h4>
+      </div>
+    </div>
+    <div class="w3-quarter">
+      <div class="w3-container w3-blue w3-padding-16">
+        <div class="w3-left"><i class="fa fa-eye w3-xxxlarge"></i></div>
+        <div class="w3-right">
+          
+        </div>
+        <div class="w3-clear"></div>
+        <h4>Projects</h4>
+      </div>
+    </div>
+    <div class="w3-quarter">
+      <div class="w3-container w3-teal w3-padding-16">
+        <div class="w3-left"><i class="fa fa-share-alt w3-xxxlarge"></i></div>
+        <div class="w3-right">
+         
+        </div>
+        <div class="w3-clear"></div>
+        <h4>Sprint</h4>
+      </div>
+    </div>
+    <div class="w3-quarter">
+      <div class="w3-container w3-orange w3-text-white w3-padding-16">
+        <div class="w3-left"><i class="fa fa-users w3-xxxlarge"></i></div>
+        <div class="w3-right">
+          
+        </div>
+        <div class="w3-clear"></div>
+        <h4>My Team</h4>
+      </div>
+    </div>
+  </div>
+  <div class="w3-panel" style="margin-top:50px">
+    <div class="w3-row-padding" style="margin:0px -16px"> 
+    </div>
+  </div>
+
+  <div id="circle" class="circleSection section">
+    <div class="w3-container">
+        <div class="row">
+          <div class="col-6 col-md-4">
+            <span class="chart" data-percent="{{state.userStoryComplete}}%">
+              <span class="percent"></span>
+              <canvas height="152" width="152"></canvas>
+            </span>
+            <h4 class="percent">User storys completed</h4>
+            <p class="percent" style="margin-left: 38px;">Data of user storys</p>
+          </div>
+
+          <div class="col-6 col-md-4">
+            <span class="chart" data-percent="{{state.projectCompleted}}%">
+              <span class="percent"></span>
+              <canvas height="152" width="152"></canvas>
+            </span>
+            <h4 class="percent">Project completed</h4>
+            <p class="percent" style="margin-left: 38px;">Data of Projects</p>
+          </div>
+
+          <div class="col-6 col-md-4">
+            <span class="chart" data-percent="{{state.sprintCompleted}}%">
+              <span class="percent"></span>
+              <canvas height="152" width="152"></canvas>
+            </span>
+            <h4 class="percent">Sprint Completed</h4>
+            <p class="percent" style="margin-left: 38px;"> Data of user sprints </p>
+          </div>
+ 
+    </div>
+</div>
+
+</div>
+
+    <div id="stats" class="statsSection section">
+      <div class="w3-container">
+          <div class="row">
+  
+              <div class="col-md-3 col-sm-6">
+                  <div class="squareItem">
+  
+                  </div>
+  
+                  <div class="squareInnerContainer">
+  
+  
+                      <div class="squareIcon">
+                          <i class="fa fa-briefcase"></i>
+                      </div>
+  
+                      <div class="squareContent">
+                          <h2 class="counterVal"> {{state.allProjects}} <h2>
+                          <h3> Projects <h3>
+                      </div>
+  
+                  </div>
+              </div>
+  
+  
+              <div class="col-md-3 col-sm-6">
+                  <div class="squareItem">
+  
+                  </div>
+  
+                  <div class="squareInnerContainer">
+  
+  
+                      <div class="squareIcon">
+                          <i class="fa fa-tasks"></i>
+                      </div>
+  
+                      <div class="squareContent">
+                          <h2 class="counterVal"> {{state.allUserStories}} <h2>
+                          <h3> User Stories <h3>
+                      </div>
+  
+                  </div>
+              </div>
+  
+  
+              <div class="col-md-3 col-sm-6">
+                  <div class="squareItem">
+  
+                  </div>
+  
+                  <div class="squareInnerContainer">
+  
+  
+                      <div class="squareIcon">
+                          <i class="fa fa-rocket"></i>
+                      </div>
+  
+                      <div class="squareContent">
+                          <h2 class="counterVal"> {{state.sprints}} <h2>
+                          <h3> Sprints <h3>
+                      </div>
+  
+                  </div>
+              </div>
+  
+              <div class="col-md-3 col-sm-6">
+                  <div class="squareItem">
+  
+                  </div>
+  
+                  <div class="squareInnerContainer">
+  
+  
+                      <div class="squareIcon">
+                          <i class="fa fa-envelope"></i>
+                      </div>
+  
+                      <div class="squareContent">
+                          <h2 class="counterVal"> {{state.messagesCount}} <h2>
+                          <h3> Messages <h3>
+                      </div>
+  
+                  </div>
+              </div>
+              
+          </div>
+      </div>
+  </div>
+
+<script src="{% static 'js/homePage.js' %}"></script>
+<script src="{% static 'js/typed.min.js' %}"></script>
+<script src="{% static 'js/jquery.easypiechart.min.js' %}"></script>
+<script src="{% static 'js/countUp-jquery.js' %}"></script>
+<script src="{% static 'js/countUp.js' %}"></script>
+
+<script>
+// Get the Sidebar
+var mySidebar = document.getElementById("mySidebar");
+
+// Get the DIV with overlay effect
+var overlayBg = document.getElementById("myOverlay");
+
+// Toggle between showing and hiding the sidebar, and add overlay effect
+function w3_open() {
+    if (mySidebar.style.display === 'block') {
+        mySidebar.style.display = 'none';
+        overlayBg.style.display = "none";
+    } else {
+        mySidebar.style.display = 'block';
+        overlayBg.style.display = "block";
+    }
+}
+
+// Close the sidebar with the close button
+function w3_close() {
+    mySidebar.style.display = "none";
+    overlayBg.style.display = "none";
+}
+</script>
+
+</body>
+{% endblock body %}
+</html>
